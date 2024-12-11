@@ -4,24 +4,65 @@ name: CI
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
-    paths:
-      - django/** 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  test:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    services:
+      db:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: Adavid02
+          MYSQL_USER: root
+          MYSQL_PASSWORD: Adavid02
+          MYSQL_DATABASE: crud_nuevo
+        ports:
+          - 3306:3306
+        options: > 
+          --health-cmd="mysqladmin ping -h localhost" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=3
+
     steps:
-      - name: Mostrar mensaje de archivo modificado
-        run: echo "Un archivo en la carpeta 'django' ha sido editado correctamente."
+    - name: Checkout code
+      uses: actions/checkout@v3
 
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install mysqlclient  # Conector de MySQL para Python
+
+    - name: Wait for MySQL
+      run: |
+        until mysqladmin ping -h 127.0.0.1 -u root -pAdavid02 --silent; do
+          echo "Waiting for database connection..."
+          sleep 3
+        done
+
+    - name: Set environment variables
+      run: |
+        echo "DATABASE_URL=mysql://root:Adavid02@127.0.0.1:3306/crud_nuevo" >> $GITHUB_ENV
+        echo "SECRET_KEY=test_secret_key" >> $GITHUB_ENV
+
+    - name: Run migrations
+      run: |
+        python manage.py makemigrations
+        python manage.py migrate
+
+    - name: Run tests
+      run: |
+        python manage.py test
