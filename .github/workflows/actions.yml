@@ -20,9 +20,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name : "Mostrar mensaje "
-<<<<<<< HEAD
+
         run: echo "Push exitoso"
-=======
-        run: echo "Hola mundo este es una prueba mas barata"
->>>>>>> ff1f8d925eb8ed83ccb13568a61367a6cf779afc
+
 
