@@ -24,9 +24,9 @@ jobs:
           MYSQL_PASSWORD: Adavid02
           MYSQL_DATABASE: crud_nuevo
         ports:
-          - 3306:3306
+          - 3307:3306
         options: > 
-          --health-cmd="mysqladmin ping -h localhost" 
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -pAdavid02"
           --health-interval=10s 
           --health-timeout=5s 
           --health-retries=3
@@ -34,6 +34,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
+    - name: Clean up Docker containers
+      run: |
+        docker ps -aq | xargs -r docker stop | xargs -r docker rm
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -55,7 +59,7 @@ jobs:
 
     - name: Set environment variables
       run: |
-        echo "DATABASE_URL=mysql://root:Adavid02@127.0.0.1:3306/crud_nuevo" >> $GITHUB_ENV
+        echo "DATABASE_URL=mysql://root:Adavid02@127.0.0.1:3307/crud_nuevo" >> $GITHUB_ENV
         echo "SECRET_KEY=test_secret_key" >> $GITHUB_ENV
 
     - name: Run migrations
@@ -66,3 +70,7 @@ jobs:
     - name: Run tests
       run: |
         python manage.py test
+
+    - name: Inspect Docker logs
+      if: failure()
+      run: docker logs $(docker ps -q -f name=db)
