@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block titulo %} Principal {% endblock %}
+
+{% block contenido %}
+
+<div class="card">
+    <div class="card-header">Categorías</div>
+    <a name="" id="" class="btn btn-primary" href="{% url 'crear' %}" role="button">Agregar nueva categoría</a>
+
+
+
+
+    <div class="card-body">
+        <h4 class="card-title">Lista de categorías</h4>
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for categoria in categorias%}
+                    <tr class="">
+                        <td scope="row">{{ categoria.id }}</td>
+                        <td>{{ categoria.nombre }}</td>
+                        <td>{{ categoria.descripcion }}</td>
+                        <td><a name="" id="" class="btn btn-warning" href="{% url 'editar' categoria.id%}" role="button">Editar</a>
+                            <a name="" id="" class="btn btn-danger" href="{% url 'borrar' categoria.id%}" role="button">Borrar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="card-footer text-muted"></div>
+</div>
+
+
+
+{% endblock %}

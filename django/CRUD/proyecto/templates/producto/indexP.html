@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block titulo %} Principal {% endblock %}
+
+{% block contenido %}
+
+<div class="card">
+    <div class="card-header">Productos</div>
+    <a name="" id="" class="btn btn-primary" href="{% url 'crearP' %}" role="button">Agregar un nuevo producto</a>
+
+
+
+
+    <div class="card-body">
+        <h4 class="card-title">Lista de productos</h4>
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Categoria</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for producto in producto%}
+                    <tr class="">
+                        <td scope="row">{{ producto.id }}</td>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.precio }}</td>
+                        <td>{{ producto.categoria }}</td>
+                        <td><a name="" id="" class="btn btn-warning" href="{% url 'editarP' producto.id%}" role="button">Editar</a>
+                            <a name="" id="" class="btn btn-danger" href="{% url 'borrarP' producto.id%}" role="button">Borrar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="card-footer text-muted"></div>
+</div>
+
+
+
+{% endblock %}

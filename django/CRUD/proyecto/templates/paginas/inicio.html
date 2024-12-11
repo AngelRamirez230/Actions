@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block titulo %} Inicio {% endblock %}
+
+{% block contenido %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="h-100 p-5 text-white bg-primary border rounded-3">
+            <h2>Categoría</h2>
+            <p>Empezar a agregar categorías</p>
+            <a name="" id="" class="btn btn-secondary" href="{% url 'index'%}" role="button">Empezar</a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="h-100 p-5 text-white bg-primary border rounded-3">
+            <h2>Producto</h2>
+            <p>Empezar a agregar productos</p>
+            <a name="" id="" class="btn btn-secondary" href="{% url 'indexP'%}" role="button">Empezar</a>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

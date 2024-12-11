@@ -1,0 +1,16 @@
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    {% for campo in formulario %}
+        <div class="mb-3">
+            <label for="" class="form-label"> {{ campo.label }}: </label>
+            <!-- Usamos {{ campo }} directamente para que Django determine el widget adecuado -->
+            {{ campo }}
+        </div>
+        <div class="col-12 help text">{{ campo.errors }}</div>
+    {% endfor %}
+
+    <div class="d-flex gap-2">
+        <input name="" id="" class="btn btn-secondary" type="submit" value="Guardar" />
+        <a name="" id="" class="btn btn-primary" href="{% url 'indexP' %}" role="button">Cancelar</a>
+    </div>
+</form>
