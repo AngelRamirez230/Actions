@@ -19,30 +19,21 @@ jobs:
       db:
         image: mysql:8
         env:
-          MYSQL_ROOT_PASSWORD: Adavid02
-          MYSQL_USER: root
-          MYSQL_PASSWORD: Adavid02
-          MYSQL_DATABASE: crud_nuevo
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_USER: django
+          MYSQL_PASSWORD: password
+          MYSQL_DATABASE: test_db
         ports:
           - 3306:3306
         options: > 
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -pAdavid02"
-          --health-interval=10s
-          --health-timeout=5s
+          --health-cmd="mysqladmin ping -h localhost" 
+          --health-interval=10s 
+          --health-timeout=5s 
           --health-retries=3
 
-
     steps:
-
-    - name: List Docker containers
-      run: docker ps -a
-
     - name: Checkout code
       uses: actions/checkout@v3
-
-    - name: Clean up Docker containers
-      run: |
-        docker ps -aq | xargs -r docker stop | xargs -r docker rm
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -57,14 +48,14 @@ jobs:
 
     - name: Wait for MySQL
       run: |
-        until mysqladmin ping -h 127.0.0.1 -u root -pAdavid02 --silent; do
+        until mysqladmin ping -h 127.0.0.1 -u django -ppassword --silent; do
           echo "Waiting for database connection..."
           sleep 3
         done
 
     - name: Set environment variables
       run: |
-        echo "DATABASE_URL=mysql://root:Adavid02@127.0.0.1:3306/crud_nuevo" >> $GITHUB_ENV
+        echo "DATABASE_URL=mysql://django:password@127.0.0.1:3306/test_db" >> $GITHUB_ENV
         echo "SECRET_KEY=test_secret_key" >> $GITHUB_ENV
 
     - name: Run migrations
@@ -75,7 +66,3 @@ jobs:
     - name: Run tests
       run: |
         python manage.py test
-
-    - name: Inspect Docker logs
-      if: failure()
-      run: docker logs $(docker ps -q -f name=db)
