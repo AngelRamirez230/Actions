@@ -7,6 +7,8 @@ on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
+    paths:
+      - django/** 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -19,8 +21,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name : "Acción completada "
-
-        run: echo "Push exitoso"
+      - name: Mostrar mensaje de archivo modificado
+        run: echo "Un archivo en la carpeta 'django' ha sido editado correctamente."
 
 
