@@ -24,12 +24,13 @@ jobs:
           MYSQL_PASSWORD: Adavid02
           MYSQL_DATABASE: crud_nuevo
         ports:
-          - 3307:3306
+          - 3306:3306
         options: > 
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -pAdavid02"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -pAdavid02" 
           --health-interval=10s 
           --health-timeout=5s 
           --health-retries=3
+
 
     steps:
     - name: Checkout code
@@ -59,7 +60,7 @@ jobs:
 
     - name: Set environment variables
       run: |
-        echo "DATABASE_URL=mysql://root:Adavid02@127.0.0.1:3307/crud_nuevo" >> $GITHUB_ENV
+        echo "DATABASE_URL=mysql://root:Adavid02@127.0.0.1:3306/crud_nuevo" >> $GITHUB_ENV
         echo "SECRET_KEY=test_secret_key" >> $GITHUB_ENV
 
     - name: Run migrations
