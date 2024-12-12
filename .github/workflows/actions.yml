@@ -43,13 +43,10 @@ jobs:
           exit 1
         fi
 
-    - name: Wait for MySQL
-      run: |
-        until mysqladmin ping -h mysql -u root -pAdavid02 --silent; do
-          echo "Waiting for database connection..."
-          sleep 3
-        done
-
+    - name: Wait for MySQL 
+      run: | 
+        for i in {1..30}; do if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then echo "Database is up!" break else echo "Waiting for database connection..." sleep 5 fi done if ! mysqladmin ping -h mysql -u root -pAdavid02 --silent; then echo "Could not connect to database." docker logs ${{ job.services.mysql.id }} exit 1 fi
+    
     - name: Run Tests
       run: |
         if [ -d django/CRUD ]; then
