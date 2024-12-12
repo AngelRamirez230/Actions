@@ -10,9 +10,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 2
       matrix:
         python-version: [3.8, 3.9]
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: Adavid02
+          MYSQL_DATABASE: crud_nuevo
+        ports:
+          - 3306:3306
+        options: > 
+          --health-cmd="mysqladmin ping -h localhost" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=3
 
     steps:
     - name: Checkout code
@@ -29,17 +43,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r django/CRUD/requirements.txt
         else
-          echo "requirements.txt not found in django directory"
+          echo "requirements.txt not found in django/CRUD directory"
           exit 1
         fi
 
+    - name: Wait for MySQL
+      run: |
+        until mysqladmin ping -h mysql -u root -pAdavid02 --silent; do
+          echo "Waiting for database connection..."
+          sleep 3
+        done
+
     - name: Run Tests
       run: |
-        if [ -d django ]; then
-          cd django
-          cd CRUD
+        if [ -d django/CRUD ]; then
+          cd django/CRUD
           python manage.py test
         else
-          echo "django directory not found"
+          echo "django/CRUD directory not found"
           exit 1
         fi
