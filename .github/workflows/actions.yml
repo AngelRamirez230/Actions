@@ -2,15 +2,14 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 2
       matrix:
         python-version: [3.8, 3.9]
 
@@ -22,16 +21,13 @@ jobs:
           MYSQL_DATABASE: crud_nuevo
         ports:
           - 3306:3306
-        options: > 
-          --health-cmd="mysql ping -h localhost"
-          --health-interval=10s --health-timeout=5s
-          --health-retries=3
+        options: --health-cmd="mysqladmin ping -h 127.0.0.1" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
