@@ -23,10 +23,7 @@ jobs:
         ports:
           - 3306:3306
         options: > 
-          --health-cmd="mysqladmin ping -h localhost" \
-          --health-interval=10s \
-          --health-timeout=5s \
-          --health-retries=3
+          --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - name: Checkout code
@@ -49,19 +46,19 @@ jobs:
 
     - name: Wait for MySQL
       run: |
-        for i in {1..30}; do \
-          if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then \
-            echo "Database is up!"; \
-            break; \
-          else \
-            echo "Waiting for database connection..."; \
-            sleep 5; \
-          fi; \
-        done; \
-        if ! mysqladmin ping -h mysql -u root -pAdavid02 --silent; then \
-          echo "Could not connect to database."; \
-          docker logs ${{ job.services.mysql.id }}; \
-          exit 1; \
+        for i in {1..30}; do
+          if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then
+            echo "Database is up!"
+            break
+          else
+            echo "Waiting for database connection..."
+            sleep 5
+          fi
+        done
+        if ! mysqladmin ping -h mysql -u root -pAdavid02 --silent; then
+          echo "Could not connect to database."
+          docker logs ${{ job.services.mysql.id }}
+          exit 1
         fi
 
     - name: Run Tests
