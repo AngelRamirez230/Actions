@@ -37,6 +37,7 @@ jobs:
       run: |
         if [ -d django ]; then
           cd django
+          cd CRUD
           python manage.py test
         else
           echo "django directory not found"
