@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'crud_nuevo'),
         'USER': os.getenv('DB_USER', 'root'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'Adavid02'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'HOST': os.getenv('DB_HOST', 'mysql'),
         'PORT': os.getenv('DB_PORT', '3306'),
     }
 }

@@ -19,7 +19,7 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-cmd="mysqladmin ping -h localhost -u root -pAdavid02"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -44,6 +44,12 @@ jobs:
         fi
 
     - name: Wait for MySQL
+      env:
+        DB_NAME: crud_nuevo
+        DB_USER: root
+        DB_PASSWORD: Adavid02
+        DB_HOST: mysql
+        DB_PORT: 3306
       run: |
         for i in {1..60}; do
           if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then
