@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 # Controls when the workflow will run
@@ -46,21 +44,27 @@ jobs:
 
     - name: Wait for MySQL
       run: |
-        until mysqladmin ping -h 127.0.0.1 -u django -ppassword --silent; do
+        until mysqladmin ping -h 127.0.0.1 -u root -pAdavid02 --silent; do
           echo "Waiting for database connection..."
           sleep 3
         done
 
     - name: Set environment variables
       run: |
-        echo "DATABASE_URL=mysql://django:password@127.0.0.1:3306/test_db" >> $GITHUB_ENV
+        echo "DATABASE_URL=mysql://django:Adavid02@127.0.0.1:3306/crud_nuevo" >> $GITHUB_ENV
         echo "SECRET_KEY=test_secret_key" >> $GITHUB_ENV
 
+    - name: Navigate to django directory
+      run: |
+        cd django
+
     - name: Run migrations
+      working-directory: django
       run: |
         python manage.py makemigrations
         python manage.py migrate
 
     - name: Run tests
+      working-directory: django
       run: |
         python manage.py test
