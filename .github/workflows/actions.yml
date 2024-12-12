@@ -41,12 +41,24 @@ jobs:
         else
           echo "requirements.txt not found in django/CRUD directory"
           exit 1
+
+    - name: Wait for MySQL
+      run: |
+        for i in {1..30}; do \
+          if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then \
+            echo "Database is up!"; \
+            break; \
+          else \
+            echo "Waiting for database connection..."; \
+            sleep 5; \
+          fi; \
+        done; \
+        if ! mysqladmin ping -h mysql -u root -pAdavid02 --silent; then \
+          echo "Could not connect to database."; \
+          docker logs ${{ job.services.mysql.id }}; \
+          exit 1; \
         fi
 
-    - name: Wait for MySQL 
-      run: | 
-        for i in {1..30}; do if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then echo "Database is up!" break else echo "Waiting for database connection..." sleep 5 fi done if ! mysqladmin ping -h mysql -u root -pAdavid02 --silent; then echo "Could not connect to database." docker logs ${{ job.services.mysql.id }} exit 1 fi
-    
     - name: Run Tests
       run: |
         if [ -d django/CRUD ]; then
@@ -55,4 +67,3 @@ jobs:
         else
           echo "django/CRUD directory not found"
           exit 1
-        fi
