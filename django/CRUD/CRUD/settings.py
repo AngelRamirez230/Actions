@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'crud_nuevo',
         'USER': 'root',
         'PASSWORD': 'Adavid02',
-        'HOST': 'mysql',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
