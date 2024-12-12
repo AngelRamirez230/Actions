@@ -25,9 +25,9 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        if [ -f django/requirements.txt ]; then
+        if [ -f django/CRUD/requirements.txt ]; then
           python -m pip install --upgrade pip
-          pip install -r django/requirements.txt
+          pip install -r django/CRUD/requirements.txt
         else
           echo "requirements.txt not found in django directory"
           exit 1
