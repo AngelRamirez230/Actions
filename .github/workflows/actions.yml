@@ -76,7 +76,7 @@ jobs:
 
       - name: Apply Migrations
         run: |
-          cd django/CRUD/proyecto
+          cd django/CRUD
           python manage.py migrate
 
       - name: Run Django Tests
