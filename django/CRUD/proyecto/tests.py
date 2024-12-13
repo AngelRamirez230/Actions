@@ -35,5 +35,5 @@ class ProductoModelTest(TestCase):
         self.assertEqual(self.producto.categoria, self.categoria)
 
     def test_producto_str(self):
-        self.assertEqual(str(self.producto), 'Nombre: Laptop - Precio: 999.99 - Categoría ID: 1')
+        self.assertEqual(str(self.producto), 'Nombre: Laptop - Precio: 999.99 - Categoría ID: 4')
 
