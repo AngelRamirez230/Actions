@@ -81,5 +81,5 @@ jobs:
 
       - name: Run Django Tests
         run: |
-          cd django/CRUD/proyecto
+          cd django/CRUD
           python manage.py test
