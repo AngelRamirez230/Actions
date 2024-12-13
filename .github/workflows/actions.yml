@@ -42,13 +42,13 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Install MySQL client
+      - name: Instalando MySQL client
         run: sudo apt-get update && sudo apt-get install -y default-mysql-client
 
       - name: List Active Containers
         run: docker ps -a
 
-      - name: Test MySQL Connection
+      - name: Pueba de conexión de MySQL
         run: |
           mysqladmin ping -h 127.0.0.1 -u root -pAdavid02 --silent || exit 1
 
@@ -61,7 +61,7 @@ jobs:
         run: |
           for i in {1..30}; do
             if mysqladmin ping -h 127.0.0.1 -u root -pAdavid02 --silent; then
-              echo "Database is up!"
+              echo "Base de datos conectada correctamente!"
               break
             else
               echo "Waiting for database connection..."
@@ -74,12 +74,12 @@ jobs:
             exit 1
           fi
 
-      - name: Apply Migrations
+      - name: Aplicando migraciones
         run: |
           cd django/CRUD
           python manage.py migrate
 
-      - name: Run Django Tests
+      - name: corriendo test Django 
         run: |
           cd django/CRUD
           python manage.py test
