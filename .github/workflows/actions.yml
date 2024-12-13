@@ -3,76 +3,51 @@ name: Django CI
 on:
   push:
     branches:
-      - "main"
+      - main
   pull_request:
     branches:
-      - "main"
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     services:
       mysql:
-        image: mysql:8
+        image: mysql:8.4.3
         env:
-          MYSQL_ROOT_PASSWORD: Adavid02
-          MYSQL_DATABASE: crud_nuevo
+          MYSQL_ROOT_PASSWORD: Adavid02  # Contraseña del root
+          MYSQL_DATABASE: crud_nuevo      # Nombre de la base de datos
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -u root -pAdavid02"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
-    env:  # Agregas las variables globales aquí
-      DB_NAME: crud_nuevo
-      DB_USER: root
-      DB_PASSWORD: Adavid02
-      DB_HOST: mysql
-      DB_PORT: 3306
+          --health-cmd="mysqladmin ping --silent" --health-timeout=5m --health-retries=3
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v2  # Clona el repositorio
 
+      # Configuración de Python
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v2
         with:
           python-version: '3.8'
 
-      - name: Install MySQL client
-        run: sudo apt-get update && sudo apt-get install -y default-mysql-client
-
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r django/CRUD/requirements.txt
-      
-      - name: Show MySQL logs
-        run: |
-          docker logs ${{ job.services.mysql.id }}
+          pip install -r requirements.txt
 
-          
-      - name: Wait for MySQL
+      # Configura las variables de entorno para Django
+      - name: Set environment variables for Django
         run: |
-          for i in {1..15}; do
-            if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then
-              echo "Database is up!"
-              break
-            else
-              echo "Waiting for database connection..."
-              sleep 5
-            fi
-          done
-          if ! mysqladmin ping -h mysql -u root -pAdavid02 --silent; then
-            echo "Could not connect to database."
-            docker logs ${{ job.services.mysql.id }}
-            exit 1
-          fi
+          echo "DATABASE_URL=mysql://root:Adavid02@127.0.0.1:3306/crud_nuevo" >> $GITHUB_ENV
 
-      - name: Run Django Tests
+      # Ejecutar las migraciones de Django
+      - name: Run migrations
         run: |
-          cd django/CRUD/proyecto
+          python manage.py migrate
+
+      # Ejecutar pruebas
+      - name: Run tests
+        run: |
           python manage.py test
