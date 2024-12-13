@@ -30,7 +30,7 @@ jobs:
       DB_NAME: crud_nuevo
       DB_USER: root
       DB_PASSWORD: Adavid02
-      DB_HOST: mysql
+      DB_HOST: 127.0.0.1
       DB_PORT: 3306
 
     steps:
@@ -48,18 +48,19 @@ jobs:
       - name: List Active Containers
         run: docker ps -a
 
+      - name: Test MySQL Connection
+        run: |
+          mysqladmin ping -h 127.0.0.1 -u root -pAdavid02 --silent || exit 1
+
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r django/CRUD/requirements.txt
 
-      - name: Show MySQL logs
-        run: docker logs ${{ job.services.mysql.id }}
-
       - name: Wait for MySQL
         run: |
-          for i in {1..20}; do
-            if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -u root -pAdavid02 --silent; then
               echo "Database is up!"
               break
             else
@@ -67,7 +68,7 @@ jobs:
               sleep 5
             fi
           done
-          if ! mysqladmin ping -h mysql -u root -pAdavid02 --silent; then
+          if ! mysqladmin ping -h 127.0.0.1 -u root -pAdavid02 --silent; then
             echo "Could not connect to database."
             docker logs ${{ job.services.mysql.id }}
             exit 1
