@@ -40,21 +40,10 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          if [ -f django/CRUD/requirements.txt ]; then
-            python -m pip install --upgrade pip
-            pip install -r django/CRUD/requirements.txt
-          else
-            echo "requirements.txt not found in django/CRUD directory"
-            exit 1
-          fi
+          python -m pip install --upgrade pip
+          pip install -r django/requirements.txt
 
       - name: Wait for MySQL
-        env:
-          DB_NAME: crud_nuevo
-          DB_USER: root
-          DB_PASSWORD: Adavid02
-          DB_HOST: mysql
-          DB_PORT: 3306
         run: |
           for i in {1..60}; do
             if mysqladmin ping -h mysql -u root -pAdavid02 --silent; then
@@ -71,20 +60,7 @@ jobs:
             exit 1
           fi
 
-      - name: Set up Django Environment Variables
-        run: |
-          echo "DB_NAME=crud_nuevo" >> $GITHUB_ENV
-          echo "DB_USER=root" >> $GITHUB_ENV
-          echo "DB_PASSWORD=Adavid02" >> $GITHUB_ENV
-          echo "DB_HOST=mysql" >> $GITHUB_ENV
-          echo "DB_PORT=3306" >> $GITHUB_ENV
-
       - name: Run Django Tests
         run: |
-          if [ -d django/CRUD ]; then
-            cd django/CRUD
-            python manage.py test
-          else
-            echo "django/CRUD directory not found"
-            exit 1
-          fi
+          cd django
+          python manage.py test
