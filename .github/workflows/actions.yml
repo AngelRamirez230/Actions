@@ -79,6 +79,14 @@ jobs:
           cd django/CRUD
           python manage.py migrate
 
+      - name: Show proyecto_categoria Table Data
+        run: |
+          mysql -h 127.0.0.1 -u root -pAdavid02 crud_nuevo -e "SELECT * FROM proyecto_categoria;"
+
+      - name: Show proyecto_producto Table Data
+        run: |
+          mysql -h 127.0.0.1 -u root -pAdavid02 crud_nuevo -e "SELECT * FROM proyecto_producto;"
+
       - name: Run Django Tests
         run: |
           cd django/CRUD
