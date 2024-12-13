@@ -50,11 +50,11 @@ WSGI_APPLICATION = 'CRUD.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'crud_nuevo'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'Adavid02'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'NAME': 'crud_nuevo',
+        'USER': 'root',
+        'PASSWORD': 'Adavid02',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
